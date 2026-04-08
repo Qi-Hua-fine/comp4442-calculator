@@ -31,4 +31,13 @@ public class CalculatorApplication {
 	) {
 		return a + " - " + b + " = " + (a - b);
 	}
+
+	// 乘法
+	@GetMapping("/mul")
+	public String mul(
+			@RequestParam int a,
+			@RequestParam int b
+	) {
+		return a + " × " + b + " = " + (a * b);
+	}
 }
