@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @SpringBootApplication
 @RestController
 public class CalculatorApplication {
@@ -21,23 +22,5 @@ public class CalculatorApplication {
 			@RequestParam int b
 	) {
 		return a + " + " + b + " = " + (a + b);
-	}
-
-	// 减法
-	@GetMapping("/sub")
-	public String sub(
-			@RequestParam int a,
-			@RequestParam int b
-	) {
-		return a + " - " + b + " = " + (a - b);
-	}
-
-	// 乘法
-	@GetMapping("/mul")
-	public String mul(
-			@RequestParam int a,
-			@RequestParam int b
-	) {
-		return a + " × " + b + " = " + (a * b);
 	}
 }
