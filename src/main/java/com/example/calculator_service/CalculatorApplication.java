@@ -74,4 +74,14 @@ public class CalculatorApplication {
 		}
 		return "输入数字总和 = " + total;
 	}
+
+	// 7. 取最大值
+	@GetMapping("/max")
+	public String max(@RequestParam List<Integer> numbers) {
+		int max = numbers.get(0);
+		for (int num : numbers) {
+			if (num > max) max = num;
+		}
+		return "最大值 = " + max;
+	}
 }
