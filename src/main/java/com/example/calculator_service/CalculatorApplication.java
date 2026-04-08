@@ -22,4 +22,13 @@ public class CalculatorApplication {
 	) {
 		return a + " + " + b + " = " + (a + b);
 	}
+
+	// 减法
+	@GetMapping("/sub")
+	public String sub(
+			@RequestParam int a,
+			@RequestParam int b
+	) {
+		return a + " - " + b + " = " + (a - b);
+	}
 }
