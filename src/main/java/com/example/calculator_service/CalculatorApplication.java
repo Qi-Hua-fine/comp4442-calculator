@@ -43,7 +43,6 @@ public class CalculatorApplication {
 		return a + " × " + b + " = " + (a * b);
 	}
 
-	//   my work finish：FANG Keshen
 
 	// 4. 除法
 	@GetMapping("/div")
@@ -84,4 +83,6 @@ public class CalculatorApplication {
 		}
 		return "最大值 = " + max;
 	}
+	//   my work finish：FANG Keshen
+
 }
