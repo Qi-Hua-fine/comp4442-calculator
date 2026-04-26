@@ -1,5 +1,6 @@
 package com.example.calculator_service.service;
 
+import com.example.calculator_service.model.CalculationResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -7,117 +8,146 @@ import java.util.List;
 @Service
 public class CalculatorService {
 
-	public String add(Integer a, Integer b) {
+	public CalculationResponse add(Integer a, Integer b) {
+		String input = binaryInput(a, b);
 		if (hasMissing(a, b)) {
-			return error("Required parameter is missing");
+			return error("add", input, "Required parameter is missing");
 		}
-		return a + " + " + b + " = " + (a + b);
+
+		int result = a + b;
+		return success("add", input, result, a + " + " + b + " = " + result);
 	}
 
-	public String sub(Integer a, Integer b) {
+	public CalculationResponse sub(Integer a, Integer b) {
+		String input = binaryInput(a, b);
 		if (hasMissing(a, b)) {
-			return error("Required parameter is missing");
+			return error("sub", input, "Required parameter is missing");
 		}
-		return a + " - " + b + " = " + (a - b);
+
+		int result = a - b;
+		return success("sub", input, result, a + " - " + b + " = " + result);
 	}
 
-	public String mul(Integer a, Integer b) {
+	public CalculationResponse mul(Integer a, Integer b) {
+		String input = binaryInput(a, b);
 		if (hasMissing(a, b)) {
-			return error("Required parameter is missing");
+			return error("mul", input, "Required parameter is missing");
 		}
-		return a + " × " + b + " = " + (a * b);
+
+		int result = a * b;
+		return success("mul", input, result, a + " × " + b + " = " + result);
 	}
 
-	public String div(Double a, Double b) {
+	public CalculationResponse div(Double a, Double b) {
+		String input = binaryInput(a, b);
 		if (hasMissing(a, b)) {
-			return error("Required parameter is missing");
+			return error("div", input, "Required parameter is missing");
 		}
 		if (b == 0) {
-			return error("Divisor cannot be 0");
+			return error("div", input, "Divisor cannot be 0");
 		}
-		return a + " ÷ " + b + " = " + (a / b);
+
+		double result = a / b;
+		return success("div", input, result, a + " ÷ " + b + " = " + result);
 	}
 
-	public String square(Integer a) {
+	public CalculationResponse square(Integer a) {
+		String input = "a=" + a;
 		if (a == null) {
-			return error("Required parameter is missing");
+			return error("square", input, "Required parameter is missing");
 		}
-		return a + " squared = " + (a * a);
+
+		int result = a * a;
+		return success("square", input, result, a + " squared = " + result);
 	}
 
-	public String sum(List<Integer> numbers) {
+	public CalculationResponse sum(List<Integer> numbers) {
+		String input = listInput(numbers);
 		if (isEmpty(numbers)) {
-			return error("Number list cannot be empty");
+			return error("sum", input, "Number list cannot be empty");
 		}
 
 		int total = 0;
 		for (int num : numbers) {
 			total += num;
 		}
-		return " InputSum = " + total;
+		return success("sum", input, total, " InputSum = " + total);
 	}
 
-	public String max(List<Integer> numbers) {
+	public CalculationResponse max(List<Integer> numbers) {
+		String input = listInput(numbers);
 		if (isEmpty(numbers)) {
-			return error("Number list cannot be empty");
+			return error("max", input, "Number list cannot be empty");
 		}
 
 		int max = numbers.get(0);
 		for (int num : numbers) {
 			if (num > max) max = num;
 		}
-		return " MaxNumber = " + max;
+		return success("max", input, max, " MaxNumber = " + max);
 	}
 
-	public String pow(Double a, Double b) {
+	public CalculationResponse pow(Double a, Double b) {
+		String input = binaryInput(a, b);
 		if (hasMissing(a, b)) {
-			return error("Required parameter is missing");
+			return error("pow", input, "Required parameter is missing");
 		}
-		return a + " ^ " + b + " = " + Math.pow(a, b);
+
+		double result = Math.pow(a, b);
+		return success("pow", input, result, a + " ^ " + b + " = " + result);
 	}
 
-	public String sqrt(Double a) {
+	public CalculationResponse sqrt(Double a) {
+		String input = "a=" + a;
 		if (a == null) {
-			return error("Required parameter is missing");
+			return error("sqrt", input, "Required parameter is missing");
 		}
 		if (a < 0) {
-			return error("Cannot calculate square root of negative number");
+			return error("sqrt", input, "Cannot calculate square root of negative number");
 		}
-		return "sqrt(" + a + ") = " + Math.sqrt(a);
+
+		double result = Math.sqrt(a);
+		return success("sqrt", input, result, "sqrt(" + a + ") = " + result);
 	}
 
-	public String avg(List<Integer> numbers) {
+	public CalculationResponse avg(List<Integer> numbers) {
+		String input = listInput(numbers);
 		if (isEmpty(numbers)) {
-			return error("Number list cannot be empty");
+			return error("avg", input, "Number list cannot be empty");
 		}
 
 		int total = 0;
 		for (int num : numbers) {
 			total += num;
 		}
-		return " Average = " + ((double) total / numbers.size());
+		double result = (double) total / numbers.size();
+		return success("avg", input, result, " Average = " + result);
 	}
 
-	public String min(List<Integer> numbers) {
+	public CalculationResponse min(List<Integer> numbers) {
+		String input = listInput(numbers);
 		if (isEmpty(numbers)) {
-			return error("Number list cannot be empty");
+			return error("min", input, "Number list cannot be empty");
 		}
 
 		int min = numbers.get(0);
 		for (int num : numbers) {
 			if (num < min) min = num;
 		}
-		return " MinNumber = " + min;
+		return success("min", input, min, " MinNumber = " + min);
 	}
 
-	public String percent(Double value, Double total) {
+	public CalculationResponse percent(Double value, Double total) {
+		String input = "value=" + value + ", total=" + total;
 		if (hasMissing(value, total)) {
-			return error("Required parameter is missing");
+			return error("percent", input, "Required parameter is missing");
 		}
 		if (total == 0) {
-			return error("Total cannot be 0");
+			return error("percent", input, "Total cannot be 0");
 		}
-		return value + " / " + total + " = " + ((value / total) * 100) + "%";
+
+		double result = (value / total) * 100;
+		return success("percent", input, result, value + " / " + total + " = " + result + "%");
 	}
 
 	private boolean hasMissing(Number a, Number b) {
@@ -128,7 +158,19 @@ public class CalculatorService {
 		return numbers == null || numbers.isEmpty();
 	}
 
-	private String error(String message) {
-		return "Error: " + message;
+	private String binaryInput(Number a, Number b) {
+		return "a=" + a + ", b=" + b;
+	}
+
+	private String listInput(List<Integer> numbers) {
+		return "numbers=" + numbers;
+	}
+
+	private CalculationResponse success(String operation, String input, Object result, String message) {
+		return new CalculationResponse(operation, input, result, message);
+	}
+
+	private CalculationResponse error(String operation, String input, String message) {
+		return new CalculationResponse(operation, input, null, "Error: " + message);
 	}
 }

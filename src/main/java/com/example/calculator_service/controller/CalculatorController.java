@@ -1,5 +1,6 @@
 package com.example.calculator_service.controller;
 
+import com.example.calculator_service.model.CalculationResponse;
 import com.example.calculator_service.service.CalculatorService;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,7 +21,7 @@ public class CalculatorController {
 	}
 
 	@GetMapping("/add")
-	public String add(
+	public CalculationResponse add(
 			@RequestParam(required = false) Integer a,
 			@RequestParam(required = false) Integer b
 	) {
@@ -28,7 +29,7 @@ public class CalculatorController {
 	}
 
 	@GetMapping("/sub")
-	public String sub(
+	public CalculationResponse sub(
 			@RequestParam(required = false) Integer a,
 			@RequestParam(required = false) Integer b
 	) {
@@ -36,7 +37,7 @@ public class CalculatorController {
 	}
 
 	@GetMapping("/mul")
-	public String mul(
+	public CalculationResponse mul(
 			@RequestParam(required = false) Integer a,
 			@RequestParam(required = false) Integer b
 	) {
@@ -44,7 +45,7 @@ public class CalculatorController {
 	}
 
 	@GetMapping("/div")
-	public String div(
+	public CalculationResponse div(
 			@RequestParam(required = false) Double a,
 			@RequestParam(required = false) Double b
 	) {
@@ -52,24 +53,24 @@ public class CalculatorController {
 	}
 
 	@GetMapping("/square")
-	public String square(
+	public CalculationResponse square(
 			@RequestParam(required = false) Integer a
 	) {
 		return calculatorService.square(a);
 	}
 
 	@GetMapping("/sum")
-	public String sum(@RequestParam(required = false) List<Integer> numbers) {
+	public CalculationResponse sum(@RequestParam(required = false) List<Integer> numbers) {
 		return calculatorService.sum(numbers);
 	}
 
 	@GetMapping("/max")
-	public String max(@RequestParam(required = false) List<Integer> numbers) {
+	public CalculationResponse max(@RequestParam(required = false) List<Integer> numbers) {
 		return calculatorService.max(numbers);
 	}
 
 	@GetMapping("/pow")
-	public String pow(
+	public CalculationResponse pow(
 			@RequestParam(required = false) Double a,
 			@RequestParam(required = false) Double b
 	) {
@@ -77,24 +78,24 @@ public class CalculatorController {
 	}
 
 	@GetMapping("/sqrt")
-	public String sqrt(
+	public CalculationResponse sqrt(
 			@RequestParam(required = false) Double a
 	) {
 		return calculatorService.sqrt(a);
 	}
 
 	@GetMapping("/avg")
-	public String avg(@RequestParam(required = false) List<Integer> numbers) {
+	public CalculationResponse avg(@RequestParam(required = false) List<Integer> numbers) {
 		return calculatorService.avg(numbers);
 	}
 
 	@GetMapping("/min")
-	public String min(@RequestParam(required = false) List<Integer> numbers) {
+	public CalculationResponse min(@RequestParam(required = false) List<Integer> numbers) {
 		return calculatorService.min(numbers);
 	}
 
 	@GetMapping("/percent")
-	public String percent(
+	public CalculationResponse percent(
 			@RequestParam(required = false) Double value,
 			@RequestParam(required = false) Double total
 	) {
@@ -105,7 +106,7 @@ public class CalculatorController {
 			MissingServletRequestParameterException.class,
 			MethodArgumentTypeMismatchException.class
 	})
-	public String handleBadRequest() {
-		return "Error: Invalid request parameter";
+	public CalculationResponse handleBadRequest() {
+		return new CalculationResponse("unknown", "", null, "Error: Invalid request parameter");
 	}
 }
