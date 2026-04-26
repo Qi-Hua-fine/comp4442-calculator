@@ -1,8 +1,10 @@
 package com.example.calculator_service.controller;
 
+import com.example.calculator_service.model.CalculationRecord;
 import com.example.calculator_service.model.CalculationResponse;
 import com.example.calculator_service.service.CalculatorService;
 import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -100,6 +102,16 @@ public class CalculatorController {
 			@RequestParam(required = false) Double total
 	) {
 		return calculatorService.percent(value, total);
+	}
+
+	@GetMapping("/history")
+	public List<CalculationRecord> history() {
+		return calculatorService.getHistory();
+	}
+
+	@DeleteMapping("/history/clear")
+	public CalculationResponse clearHistory() {
+		return calculatorService.clearHistory();
 	}
 
 	@ExceptionHandler({

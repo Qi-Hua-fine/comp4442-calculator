@@ -1,12 +1,18 @@
 package com.example.calculator_service.service;
 
+import com.example.calculator_service.model.CalculationRecord;
 import com.example.calculator_service.model.CalculationResponse;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 public class CalculatorService {
+
+	private final List<CalculationRecord> history = new CopyOnWriteArrayList<>();
 
 	public CalculationResponse add(Integer a, Integer b) {
 		String input = binaryInput(a, b);
@@ -150,6 +156,15 @@ public class CalculatorService {
 		return success("percent", input, result, value + " / " + total + " = " + result + "%");
 	}
 
+	public List<CalculationRecord> getHistory() {
+		return new ArrayList<>(history);
+	}
+
+	public CalculationResponse clearHistory() {
+		history.clear();
+		return new CalculationResponse("clearHistory", "", null, "History cleared");
+	}
+
 	private boolean hasMissing(Number a, Number b) {
 		return a == null || b == null;
 	}
@@ -167,6 +182,7 @@ public class CalculatorService {
 	}
 
 	private CalculationResponse success(String operation, String input, Object result, String message) {
+		history.add(new CalculationRecord(operation, input, result, Instant.now().toString()));
 		return new CalculationResponse(operation, input, result, message);
 	}
 
