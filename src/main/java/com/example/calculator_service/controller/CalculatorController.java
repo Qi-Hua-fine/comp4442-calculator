@@ -2,6 +2,7 @@ package com.example.calculator_service.controller;
 
 import com.example.calculator_service.model.CalculationRecord;
 import com.example.calculator_service.model.CalculationResponse;
+import com.example.calculator_service.model.CalculationStats;
 import com.example.calculator_service.service.CalculatorService;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -112,6 +113,11 @@ public class CalculatorController {
 	@DeleteMapping("/history/clear")
 	public CalculationResponse clearHistory() {
 		return calculatorService.clearHistory();
+	}
+
+	@GetMapping("/stats")
+	public CalculationStats stats() {
+		return calculatorService.getStats();
 	}
 
 	@ExceptionHandler({

@@ -2,11 +2,14 @@ package com.example.calculator_service.service;
 
 import com.example.calculator_service.model.CalculationRecord;
 import com.example.calculator_service.model.CalculationResponse;
+import com.example.calculator_service.model.CalculationStats;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
@@ -163,6 +166,21 @@ public class CalculatorService {
 	public CalculationResponse clearHistory() {
 		history.clear();
 		return new CalculationResponse("clearHistory", "", null, "History cleared");
+	}
+
+	public CalculationStats getStats() {
+		List<CalculationRecord> records = getHistory();
+		Map<String, Integer> countByOperation = new LinkedHashMap<>();
+
+		for (CalculationRecord record : records) {
+			countByOperation.put(
+					record.getOperation(),
+					countByOperation.getOrDefault(record.getOperation(), 0) + 1
+			);
+		}
+
+		CalculationRecord latestCalculation = records.isEmpty() ? null : records.get(records.size() - 1);
+		return new CalculationStats(records.size(), countByOperation, latestCalculation);
 	}
 
 	private boolean hasMissing(Number a, Number b) {
