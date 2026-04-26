@@ -64,4 +64,37 @@ public class CalculatorController {
 	public String max(@RequestParam List<Integer> numbers) {
 		return calculatorService.max(numbers);
 	}
+
+	@GetMapping("/pow")
+	public String pow(
+			@RequestParam double a,
+			@RequestParam double b
+	) {
+		return calculatorService.pow(a, b);
+	}
+
+	@GetMapping("/sqrt")
+	public String sqrt(
+			@RequestParam double a
+	) {
+		return calculatorService.sqrt(a);
+	}
+
+	@GetMapping("/avg")
+	public String avg(@RequestParam(required = false) List<Integer> numbers) {
+		return calculatorService.avg(numbers);
+	}
+
+	@GetMapping("/min")
+	public String min(@RequestParam(required = false) List<Integer> numbers) {
+		return calculatorService.min(numbers);
+	}
+
+	@GetMapping("/percent")
+	public String percent(
+			@RequestParam double value,
+			@RequestParam double total
+	) {
+		return calculatorService.percent(value, total);
+	}
 }

@@ -45,4 +45,46 @@ public class CalculatorService {
 		}
 		return " MaxNumber = " + max;
 	}
+
+	public String pow(double a, double b) {
+		return a + " ^ " + b + " = " + Math.pow(a, b);
+	}
+
+	public String sqrt(double a) {
+		if (a < 0) {
+			return "Error: Cannot calculate square root of negative number";
+		}
+		return "sqrt(" + a + ") = " + Math.sqrt(a);
+	}
+
+	public String avg(List<Integer> numbers) {
+		if (numbers == null || numbers.isEmpty()) {
+			return "Error: Number list cannot be empty";
+		}
+
+		int total = 0;
+		for (int num : numbers) {
+			total += num;
+		}
+		return " Average = " + ((double) total / numbers.size());
+	}
+
+	public String min(List<Integer> numbers) {
+		if (numbers == null || numbers.isEmpty()) {
+			return "Error: Number list cannot be empty";
+		}
+
+		int min = numbers.get(0);
+		for (int num : numbers) {
+			if (num < min) min = num;
+		}
+		return " MinNumber = " + min;
+	}
+
+	public String percent(double value, double total) {
+		if (total == 0) {
+			return "Error: Total cannot be 0";
+		}
+		return value + " / " + total + " = " + ((value / total) * 100) + "%";
+	}
 }
