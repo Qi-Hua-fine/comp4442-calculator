@@ -200,6 +200,10 @@ public class CalculatorService {
 	}
 
 	private CalculationResponse success(String operation, String input, Object result, String message) {
+		if (result instanceof Double value && !Double.isFinite(value)) {
+			return error(operation, input, "The result is too large to calculate or display.");
+		}
+
 		history.add(new CalculationRecord(operation, input, result, Instant.now().toString()));
 		return new CalculationResponse(operation, input, result, message);
 	}
