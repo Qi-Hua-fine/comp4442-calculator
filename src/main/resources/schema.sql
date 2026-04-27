@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS calculation_history (
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	operation VARCHAR(50) NOT NULL,
+	input TEXT NOT NULL,
+	result VARCHAR(255) NOT NULL,
+	created_at VARCHAR(64) NOT NULL
+);

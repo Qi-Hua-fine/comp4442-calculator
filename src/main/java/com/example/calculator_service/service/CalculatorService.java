@@ -3,19 +3,22 @@ package com.example.calculator_service.service;
 import com.example.calculator_service.model.CalculationRecord;
 import com.example.calculator_service.model.CalculationResponse;
 import com.example.calculator_service.model.CalculationStats;
+import com.example.calculator_service.repository.CalculationHistoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 public class CalculatorService {
 
-	private final List<CalculationRecord> history = new CopyOnWriteArrayList<>();
+	private final CalculationHistoryRepository historyRepository;
+
+	public CalculatorService(CalculationHistoryRepository historyRepository) {
+		this.historyRepository = historyRepository;
+	}
 
 	public CalculationResponse add(Integer a, Integer b) {
 		String input = binaryInput(a, b);
@@ -160,11 +163,11 @@ public class CalculatorService {
 	}
 
 	public List<CalculationRecord> getHistory() {
-		return new ArrayList<>(history);
+		return historyRepository.findAll();
 	}
 
 	public CalculationResponse clearHistory() {
-		history.clear();
+		historyRepository.deleteAll();
 		return new CalculationResponse("clearHistory", "", null, "History cleared");
 	}
 
@@ -204,7 +207,7 @@ public class CalculatorService {
 			return error(operation, input, "The result is too large to calculate or display.");
 		}
 
-		history.add(new CalculationRecord(operation, input, result, Instant.now().toString()));
+		historyRepository.save(new CalculationRecord(operation, input, result, Instant.now().toString()));
 		return new CalculationResponse(operation, input, result, message);
 	}
 
