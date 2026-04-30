@@ -6,13 +6,21 @@ import com.example.calculator_service.model.CalculationStats;
 import com.example.calculator_service.repository.CalculationHistoryRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Service
 public class CalculatorService {
+
+	private static final double SCIENTIFIC_UPPER_LIMIT = 1_000_000_000_000.0;
+	private static final double SCIENTIFIC_LOWER_LIMIT = 0.000001;
 
 	private final CalculationHistoryRepository historyRepository;
 
@@ -20,34 +28,34 @@ public class CalculatorService {
 		this.historyRepository = historyRepository;
 	}
 
-	public CalculationResponse add(Integer a, Integer b) {
+	public CalculationResponse add(Double a, Double b) {
 		String input = binaryInput(a, b);
 		if (hasMissing(a, b)) {
 			return error("add", input, "Required parameter is missing");
 		}
 
-		int result = a + b;
-		return success("add", input, result, a + " + " + b + " = " + result);
+		double result = a + b;
+		return success("add", input, result, a + " + " + b + " = ", "");
 	}
 
-	public CalculationResponse sub(Integer a, Integer b) {
+	public CalculationResponse sub(Double a, Double b) {
 		String input = binaryInput(a, b);
 		if (hasMissing(a, b)) {
 			return error("sub", input, "Required parameter is missing");
 		}
 
-		int result = a - b;
-		return success("sub", input, result, a + " - " + b + " = " + result);
+		double result = a - b;
+		return success("sub", input, result, a + " - " + b + " = ", "");
 	}
 
-	public CalculationResponse mul(Integer a, Integer b) {
+	public CalculationResponse mul(Double a, Double b) {
 		String input = binaryInput(a, b);
 		if (hasMissing(a, b)) {
 			return error("mul", input, "Required parameter is missing");
 		}
 
-		int result = a * b;
-		return success("mul", input, result, a + " × " + b + " = " + result);
+		double result = a * b;
+		return success("mul", input, result, a + " × " + b + " = ", "");
 	}
 
 	public CalculationResponse div(Double a, Double b) {
@@ -60,43 +68,43 @@ public class CalculatorService {
 		}
 
 		double result = a / b;
-		return success("div", input, result, a + " ÷ " + b + " = " + result);
+		return success("div", input, result, a + " ÷ " + b + " = ", "");
 	}
 
-	public CalculationResponse square(Integer a) {
+	public CalculationResponse square(Double a) {
 		String input = "a=" + a;
 		if (a == null) {
 			return error("square", input, "Required parameter is missing");
 		}
 
-		int result = a * a;
-		return success("square", input, result, a + " squared = " + result);
+		double result = a * a;
+		return success("square", input, result, a + " squared = ", "");
 	}
 
-	public CalculationResponse sum(List<Integer> numbers) {
+	public CalculationResponse sum(List<Double> numbers) {
 		String input = listInput(numbers);
 		if (isEmpty(numbers)) {
 			return error("sum", input, "Number list cannot be empty");
 		}
 
-		int total = 0;
-		for (int num : numbers) {
+		double total = 0;
+		for (double num : numbers) {
 			total += num;
 		}
-		return success("sum", input, total, " InputSum = " + total);
+		return success("sum", input, total, " InputSum = ", "");
 	}
 
-	public CalculationResponse max(List<Integer> numbers) {
+	public CalculationResponse max(List<Double> numbers) {
 		String input = listInput(numbers);
 		if (isEmpty(numbers)) {
 			return error("max", input, "Number list cannot be empty");
 		}
 
-		int max = numbers.get(0);
-		for (int num : numbers) {
+		double max = numbers.get(0);
+		for (double num : numbers) {
 			if (num > max) max = num;
 		}
-		return success("max", input, max, " MaxNumber = " + max);
+		return success("max", input, max, " MaxNumber = ", "");
 	}
 
 	public CalculationResponse pow(Double a, Double b) {
@@ -106,7 +114,7 @@ public class CalculatorService {
 		}
 
 		double result = Math.pow(a, b);
-		return success("pow", input, result, a + " ^ " + b + " = " + result);
+		return success("pow", input, result, a + " ^ " + b + " = ", "");
 	}
 
 	public CalculationResponse sqrt(Double a) {
@@ -119,34 +127,34 @@ public class CalculatorService {
 		}
 
 		double result = Math.sqrt(a);
-		return success("sqrt", input, result, "sqrt(" + a + ") = " + result);
+		return success("sqrt", input, result, "sqrt(" + a + ") = ", "");
 	}
 
-	public CalculationResponse avg(List<Integer> numbers) {
+	public CalculationResponse avg(List<Double> numbers) {
 		String input = listInput(numbers);
 		if (isEmpty(numbers)) {
 			return error("avg", input, "Number list cannot be empty");
 		}
 
-		int total = 0;
-		for (int num : numbers) {
+		double total = 0;
+		for (double num : numbers) {
 			total += num;
 		}
-		double result = (double) total / numbers.size();
-		return success("avg", input, result, " Average = " + result);
+		double result = total / numbers.size();
+		return success("avg", input, result, " Average = ", "");
 	}
 
-	public CalculationResponse min(List<Integer> numbers) {
+	public CalculationResponse min(List<Double> numbers) {
 		String input = listInput(numbers);
 		if (isEmpty(numbers)) {
 			return error("min", input, "Number list cannot be empty");
 		}
 
-		int min = numbers.get(0);
-		for (int num : numbers) {
+		double min = numbers.get(0);
+		for (double num : numbers) {
 			if (num < min) min = num;
 		}
-		return success("min", input, min, " MinNumber = " + min);
+		return success("min", input, min, " MinNumber = ", "");
 	}
 
 	public CalculationResponse percent(Double value, Double total) {
@@ -159,7 +167,7 @@ public class CalculatorService {
 		}
 
 		double result = (value / total) * 100;
-		return success("percent", input, result, value + " / " + total + " = " + result + "%");
+		return success("percent", input, result, value + " / " + total + " = ", "%");
 	}
 
 	public List<CalculationRecord> getHistory() {
@@ -190,7 +198,7 @@ public class CalculatorService {
 		return a == null || b == null;
 	}
 
-	private boolean isEmpty(List<Integer> numbers) {
+	private boolean isEmpty(List<Double> numbers) {
 		return numbers == null || numbers.isEmpty();
 	}
 
@@ -198,17 +206,36 @@ public class CalculatorService {
 		return "a=" + a + ", b=" + b;
 	}
 
-	private String listInput(List<Integer> numbers) {
+	private String listInput(List<Double> numbers) {
 		return "numbers=" + numbers;
 	}
 
-	private CalculationResponse success(String operation, String input, Object result, String message) {
-		if (result instanceof Double value && !Double.isFinite(value)) {
+	private CalculationResponse success(String operation, String input, double result, String messagePrefix, String messageSuffix) {
+		if (!Double.isFinite(result)) {
 			return error(operation, input, "The result is too large to calculate or display.");
 		}
 
-		historyRepository.save(new CalculationRecord(operation, input, result, Instant.now().toString()));
-		return new CalculationResponse(operation, input, result, message);
+		String formattedResult = formatResult(result);
+		String message = messagePrefix + formattedResult + messageSuffix;
+
+		historyRepository.save(new CalculationRecord(operation, input, formattedResult, Instant.now().toString()));
+		return new CalculationResponse(operation, input, formattedResult, message);
+	}
+
+	private String formatResult(double result) {
+		double absoluteResult = Math.abs(result);
+		if (absoluteResult >= SCIENTIFIC_UPPER_LIMIT || (absoluteResult > 0 && absoluteResult < SCIENTIFIC_LOWER_LIMIT)) {
+			DecimalFormat scientificFormat = new DecimalFormat("0.###############E0", DecimalFormatSymbols.getInstance(Locale.US));
+			return scientificFormat.format(result);
+		}
+
+		BigDecimal formatted = BigDecimal.valueOf(result)
+				.setScale(10, RoundingMode.HALF_UP)
+				.stripTrailingZeros();
+		if (formatted.scale() < 0) {
+			return formatted.setScale(0).toPlainString();
+		}
+		return formatted.toPlainString();
 	}
 
 	private CalculationResponse error(String operation, String input, String message) {

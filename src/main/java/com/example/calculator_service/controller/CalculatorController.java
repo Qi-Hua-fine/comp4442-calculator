@@ -25,24 +25,24 @@ public class CalculatorController {
 
 	@GetMapping("/add")
 	public CalculationResponse add(
-			@RequestParam(required = false) Integer a,
-			@RequestParam(required = false) Integer b
+			@RequestParam(required = false) Double a,
+			@RequestParam(required = false) Double b
 	) {
 		return calculatorService.add(a, b);
 	}
 
 	@GetMapping("/sub")
 	public CalculationResponse sub(
-			@RequestParam(required = false) Integer a,
-			@RequestParam(required = false) Integer b
+			@RequestParam(required = false) Double a,
+			@RequestParam(required = false) Double b
 	) {
 		return calculatorService.sub(a, b);
 	}
 
 	@GetMapping("/mul")
 	public CalculationResponse mul(
-			@RequestParam(required = false) Integer a,
-			@RequestParam(required = false) Integer b
+			@RequestParam(required = false) Double a,
+			@RequestParam(required = false) Double b
 	) {
 		return calculatorService.mul(a, b);
 	}
@@ -57,18 +57,18 @@ public class CalculatorController {
 
 	@GetMapping("/square")
 	public CalculationResponse square(
-			@RequestParam(required = false) Integer a
+			@RequestParam(required = false) Double a
 	) {
 		return calculatorService.square(a);
 	}
 
 	@GetMapping("/sum")
-	public CalculationResponse sum(@RequestParam(required = false) List<Integer> numbers) {
+	public CalculationResponse sum(@RequestParam(required = false) List<Double> numbers) {
 		return calculatorService.sum(numbers);
 	}
 
 	@GetMapping("/max")
-	public CalculationResponse max(@RequestParam(required = false) List<Integer> numbers) {
+	public CalculationResponse max(@RequestParam(required = false) List<Double> numbers) {
 		return calculatorService.max(numbers);
 	}
 
@@ -88,12 +88,12 @@ public class CalculatorController {
 	}
 
 	@GetMapping("/avg")
-	public CalculationResponse avg(@RequestParam(required = false) List<Integer> numbers) {
+	public CalculationResponse avg(@RequestParam(required = false) List<Double> numbers) {
 		return calculatorService.avg(numbers);
 	}
 
 	@GetMapping("/min")
-	public CalculationResponse min(@RequestParam(required = false) List<Integer> numbers) {
+	public CalculationResponse min(@RequestParam(required = false) List<Double> numbers) {
 		return calculatorService.min(numbers);
 	}
 
